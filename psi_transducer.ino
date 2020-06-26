@@ -310,7 +310,6 @@ void readTransducer() {
     oled.print("PSI");
   }
 
-
   scaleRes = (scaleMax - scaleMin);
   inputRes = (inputMax - inputMin);
   m = (scaleRes / inputRes);
