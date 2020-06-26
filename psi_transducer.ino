@@ -171,12 +171,6 @@ constexpr uint8_t mainMenuSize = GET_MENU_SIZE(mainMenu);
 // Sub-menu
 ///////////////////////////////////////////////////////////////////////////////
 
-// Example callback function
-//void foo() {
-//  Serial.print("Generic foo() function sees value is set to ");
-//  Serial.println(value);
-//}
-
 void(* resetFunc) (void) = 0; //declare reset function @ address 0
 
 // For this menu most entries are in PROGMEM Flash, and the last two in SRAM
@@ -222,11 +216,6 @@ const SerialMenuEntry subMenu[] = {
       resetFunc();
     }
   },
-  //  { subMenuStr9, false, 'I',
-  //    []() {
-  //      value = menu.getNumber<float>("Input floating point: ");
-  //    }
-  //  },
   { "M - Menu",  false, 'm',
     []() {
       menu.show();
@@ -241,12 +230,15 @@ const SerialMenuEntry subMenu[] = {
 };
 constexpr uint8_t subMenuSize = GET_MENU_SIZE(subMenu);
 
-
 void setup() {
 
   Serial.begin(9600);
   // Set the main menu as the current active menu
-
+  menu.load(mainMenu, mainMenuSize);
+  // Display the current menu
+  menu.show();
+  Serial.println(COPYRIGHT);
+  while (!Serial) {};
 
   Wire.begin();
   oled.begin(SSD1306_SWITCHCAPVCC, 0x3C);
@@ -261,13 +253,6 @@ void setup() {
   oled.display();
   delay(4000);
   oled.clearDisplay();
-  menu.load(mainMenu, mainMenuSize);
-  // Display the current menu
-  menu.show();
-  Serial.println(COPYRIGHT);
-  while (!Serial) {};
-
-
 }
 
 void loop()
@@ -278,7 +263,6 @@ void loop()
 
 }
 
-
 void serialPrintValue() {
   if (printOut == 1) {
     Serial.println(presion);
@@ -287,10 +271,8 @@ void serialPrintValue() {
 
 void readTransducer() {
 
-
   lectura = analogRead(transductorPin);
   unit = digitalRead(in7);
-
 
   if ((unit) == true) {
     scaleMax = 10; //psi o bar
